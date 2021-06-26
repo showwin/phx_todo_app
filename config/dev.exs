@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :phx_todo_app, PhxTodoApp.Repo,
-  username: "postgres",
-  password: "postgres",
-  database: "phx_todo_app_dev",
-  hostname: "localhost",
+  username:  System.get_env("POSTGRES_USERNAME"),
+  password:  System.get_env("POSTGRES_PASSWORD"),
+  database:  System.get_env("POSTGRES_DATABASE"),
+  hostname:  System.get_env("POSTGRES_HOSTNAME"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
