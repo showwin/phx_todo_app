@@ -6,22 +6,21 @@ defmodule PhxTodoAppWeb.ItemLive.ItemComponent do
     ~L"""
     <div id="item-<%= @item.id %>">
       <div class="row item">
-        <div clsss="column column-20 item-check">
-          <span>DONE: <%= @item.done %></span>
+        <div clsss="column column-20">
           <%= if @item.done do %>
-            <a href="#" phx-click="undo" phx-target="<%= @myself %>">
+            <a href="#" phx-click="undo" phx-target="<%= @myself %>" class="item-check">
               <input type="checkbox" checked>
             </a>
           <% else %>
-            <a href="#" phx-click="done" phx-target="<%= @myself %>">
+            <a href="#" phx-click="done" phx-target="<%= @myself %>" class="item-check">
               <input type="checkbox">
             </a>
           <% end %>
         </div>
-        <div class="column column-70 item-body">
+        <div class="column column-80 item-body">
           <p><%= @item.title %></p>
         </div>
-        <div class="column column-10">
+        <div class="column column-20">
         <%= live_patch to: Routes.item_index_path(@socket, :edit, @item.id) do %>
           <span>更新</span>
         <% end %>
