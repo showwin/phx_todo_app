@@ -7,7 +7,7 @@ defmodule PhxTodoAppWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_phx_todo_app_key",
-    signing_salt: "tew/OL88"
+    signing_salt: "PCMfN+gu"
   ]
 
   socket "/socket", PhxTodoAppWeb.UserSocket,

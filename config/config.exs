@@ -13,10 +13,10 @@ config :phx_todo_app,
 # Configures the endpoint
 config :phx_todo_app, PhxTodoAppWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "phxbI/ZqEtcjn/m9PQ2z9NzsAZnJ2k/nnxgzjud156/z+xiJ/hhJzcEzHp4j8Xc2",
+  secret_key_base: "hwS1VqdjLP2DjDM195452n8FDxAExvU06aW2CWNvHlJSTPrm5E2uBJ0rzoHLFzPy",
   render_errors: [view: PhxTodoAppWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: PhxTodoApp.PubSub,
-  live_view: [signing_salt: "s3GsPyu9"]
+  live_view: [signing_salt: "GioEEosc"]
 
 # Configures Elixir's Logger
 config :logger, :console,
