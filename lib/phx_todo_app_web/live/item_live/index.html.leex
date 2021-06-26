@@ -1,4 +1,4 @@
-<h1>Listing Items</h1>
+<h1>ToDo List</h1>
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal @socket, PhxTodoAppWeb.ItemLive.FormComponent,
@@ -9,29 +9,11 @@
     return_to: Routes.item_index_path(@socket, :index) %>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Done</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="items">
+<div id="items">
     <%= for item <- @items do %>
-      <tr id="item-<%= item.id %>">
-        <td><%= item.title %></td>
-        <td><%= item.done %></td>
-
-        <td>
-          <span><%= live_redirect "Show", to: Routes.item_show_path(@socket, :show, item) %></span>
-          <span><%= live_patch "Edit", to: Routes.item_index_path(@socket, :edit, item) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: item.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
+      <%= live_component @socket, PhxTodoAppWeb.ItemLive.ItemComponent, id: item.id, item: item%>
     <% end %>
-  </tbody>
-</table>
+</div>
 
 <span><%= live_patch "New Item", to: Routes.item_index_path(@socket, :new) %></span>

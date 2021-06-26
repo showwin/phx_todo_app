@@ -6,6 +6,7 @@ defmodule PhxTodoAppWeb.ItemLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Todolist.subscribe()
     {:ok, assign(socket, :items, list_items())}
   end
 
@@ -38,6 +39,14 @@ defmodule PhxTodoAppWeb.ItemLive.Index do
     {:ok, _} = Todolist.delete_item(item)
 
     {:noreply, assign(socket, :items, list_items())}
+  end
+
+  @impl true
+  def handle_info({:item_created, item}, socket) do
+    {:noreply, update(socket, :items, fn items -> [items | item] end)}
+  end
+  def handle_info({:item_updated, item}, socket) do
+    {:noreply, update(socket, :items, fn items -> [items | item] end)}
   end
 
   defp list_items do

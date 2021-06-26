@@ -53,6 +53,7 @@ defmodule PhxTodoApp.Todolist do
     %Item{}
     |> Item.changeset(attrs)
     |> Repo.insert()
+    |> broadcast(:item_created)
   end
 
   @doc """
@@ -71,6 +72,14 @@ defmodule PhxTodoApp.Todolist do
     item
     |> Item.changeset(attrs)
     |> Repo.update()
+    |> broadcast(:item_created)
+  end
+
+  def update_item_status(%Item{id: id}, is_done) do
+    {1, [item]} = from(i in Item, where: i.id == ^id, select: i)
+    |> Repo.update_all(set: [done: is_done])
+
+    broadcast({:ok, item}, :item_updated)
   end
 
   @doc """
@@ -100,5 +109,15 @@ defmodule PhxTodoApp.Todolist do
   """
   def change_item(%Item{} = item, attrs \\ %{}) do
     Item.changeset(item, attrs)
+  end
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(PhxTodoApp.PubSub, "item")
+  end
+
+  defp broadcast({:error, _reason} = error, _event), do: error
+  defp broadcast({:ok, item}, event) do
+    Phoenix.PubSub.broadcast(PhxTodoApp.PubSub, "item", {event, item})
+    {:ok, item}
   end
 end
