@@ -12,7 +12,7 @@ defmodule PhxTodoApp.Todolist.Item do
   @doc false
   def changeset(item, attrs) do
     item
-    |> cast(attrs, [:title, :done])
-    |> validate_required([:title, :done])
+    |> cast(attrs, [:title])
+    |> validate_required([:title])
   end
 end
