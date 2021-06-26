@@ -14,5 +14,6 @@ defmodule PhxTodoApp.Todolist.Item do
     item
     |> cast(attrs, [:title])
     |> validate_required([:title])
+    |> validate_length(:title, min: 2, max: 250)
   end
 end
