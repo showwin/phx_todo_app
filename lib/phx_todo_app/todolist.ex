@@ -96,6 +96,8 @@ defmodule PhxTodoApp.Todolist do
   """
   def delete_item(%Item{} = item) do
     Repo.delete(item)
+
+    broadcast({:ok, item}, :item_deleted)
   end
 
   @doc """

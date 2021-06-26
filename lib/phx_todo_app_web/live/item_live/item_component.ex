@@ -24,6 +24,9 @@ defmodule PhxTodoAppWeb.ItemLive.ItemComponent do
         <%= live_patch to: Routes.item_index_path(@socket, :edit, @item.id) do %>
           <span>更新</span>
         <% end %>
+        <%= link to: "#", phx_click: "delete", phx_target: @myself do %>
+          <span>削除</span>
+        <% end %>
       </div>
       </div>
     </div>
@@ -31,12 +34,17 @@ defmodule PhxTodoAppWeb.ItemLive.ItemComponent do
   end
 
   def handle_event("done", _, socket) do
-    PhxTodoApp.Todolist.update_item_status(socket.assigns.item, is_done=true)
+    PhxTodoApp.Todolist.update_item_status(socket.assigns.item, true)
     {:noreply, socket}
   end
 
   def handle_event("undo", _, socket) do
-    PhxTodoApp.Todolist.update_item_status(socket.assigns.item, is_done=false)
+    PhxTodoApp.Todolist.update_item_status(socket.assigns.item, false)
+    {:noreply, socket}
+  end
+
+  def handle_event("delete", _, socket) do
+    PhxTodoApp.Todolist.delete_item(socket.assigns.item)
     {:noreply, socket}
   end
 end

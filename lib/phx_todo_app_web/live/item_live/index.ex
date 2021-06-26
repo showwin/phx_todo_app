@@ -48,6 +48,9 @@ defmodule PhxTodoAppWeb.ItemLive.Index do
   def handle_info({:item_updated, item}, socket) do
     {:noreply, update(socket, :items, fn items -> [items | item] end)}
   end
+  def handle_info({:item_deleted, item}, socket) do
+    {:noreply, update(socket, :items, fn items -> items -- item end)}
+  end
 
   defp list_items do
     Todolist.list_items()
