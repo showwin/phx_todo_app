@@ -18,7 +18,7 @@ defmodule PhxTodoApp.Todolist do
 
   """
   def list_items do
-    Repo.all(Item)
+    Repo.all(from i in Item, order_by: [i.order, asc: i.inserted_at])
   end
 
   @doc """
@@ -50,6 +50,9 @@ defmodule PhxTodoApp.Todolist do
 
   """
   def create_item(attrs \\ %{}) do
+    [%{latest_order: latest_order}] = Repo.all(from(i in Item, select: %{latest_order: max(i.order)}))
+    attrs = Map.put(attrs, "order", latest_order + 1)
+
     %Item{}
     |> Item.changeset(attrs)
     |> Repo.insert()

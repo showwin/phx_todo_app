@@ -5,6 +5,7 @@ defmodule PhxTodoApp.Todolist.Item do
   schema "items" do
     field :done, :boolean, default: false
     field :title, :string
+    field :order, :integer, default: 1
 
     timestamps()
   end
@@ -12,8 +13,8 @@ defmodule PhxTodoApp.Todolist.Item do
   @doc false
   def changeset(item, attrs) do
     item
-    |> cast(attrs, [:title])
-    |> validate_required([:title])
+    |> cast(attrs, [:title, :order])
+    |> validate_required([:title, :order])
     |> validate_length(:title, min: 2, max: 250)
   end
 end
