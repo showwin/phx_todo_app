@@ -20,14 +20,22 @@ defmodule PhxTodoAppWeb.ItemLive.ItemComponent do
         <div class="column column-80 item-body">
           <p><%= @item.title %></p>
         </div>
+        <div class="column-10">
+          <%= link to: "#", phx_click: "higher_priority", phx_target: @myself do %>
+            <span>↑</span>
+          <% end %>
+          <%= link to: "#", phx_click: "lower_priority", phx_target: @myself do %>
+            <span>↓</span>
+          <% end %>
+        </div>
         <div class="column column-20">
-        <%= live_patch to: Routes.item_index_path(@socket, :edit, @item.id) do %>
-          <span>更新</span>
-        <% end %>
-        <%= link to: "#", phx_click: "delete", phx_target: @myself do %>
-          <span>削除</span>
-        <% end %>
-      </div>
+          <%= live_patch to: Routes.item_index_path(@socket, :edit, @item.id) do %>
+            <span>更新</span>
+          <% end %>
+          <%= link to: "#", phx_click: "delete", phx_target: @myself do %>
+            <span>削除</span>
+          <% end %>
+        </div>
       </div>
     </div>
     """
@@ -45,6 +53,16 @@ defmodule PhxTodoAppWeb.ItemLive.ItemComponent do
 
   def handle_event("delete", _, socket) do
     PhxTodoApp.Todolist.delete_item(socket.assigns.item)
+    {:noreply, socket}
+  end
+
+  def handle_event("higher_priority", _, socket) do
+    PhxTodoApp.Todolist.higher_priority(socket.assigns.item)
+    {:noreply, socket}
+  end
+
+  def handle_event("lower_priority", _, socket) do
+    PhxTodoApp.Todolist.lower_priority(socket.assigns.item)
     {:noreply, socket}
   end
 end

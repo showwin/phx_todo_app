@@ -78,9 +78,86 @@ defmodule PhxTodoApp.Todolist do
     |> broadcast(:item_created)
   end
 
+  @doc """
+  set item as done or not done
+
+    ## Examples
+
+      iex> update_item_status(item)
+      {:ok, %Item{}}
+
+      iex> update_item_status(item)
+      {:error, %Ecto.Changeset{}}
+
+  """
   def update_item_status(%Item{id: id}, is_done) do
     {1, [item]} = from(i in Item, where: i.id == ^id, select: i)
     |> Repo.update_all(set: [done: is_done])
+
+    broadcast({:ok, item}, :item_updated)
+  end
+
+  @doc """
+  set a higher priotiry to the item
+
+    ## Examples
+
+      iex> higher_priority(item)
+      {:ok, %Item{}}
+
+      iex> higher_priority(item)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def higher_priority(%Item{} = item) do
+    higher_items = Repo.all(from(i in Item, where: i.order < ^item.order, select: i, order_by: [desc: i.order], limit: 2))
+    order = case length(higher_items) do
+      0 -> item.order
+      1 -> Enum.at(higher_items, 0).order / 2
+      2 -> (Enum.at(higher_items, 0).order + Enum.at(higher_items, 1).order) / 2
+    end
+
+    update_item_order(item, order)
+  end
+
+  @doc """
+  set a lower priotiry to the item
+
+    ## Examples
+
+      iex> lower_priority(item)
+      {:ok, %Item{}}
+
+      iex> lower_priority(item)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def lower_priority(%Item{} = item) do
+    lower_items = Repo.all(from(i in Item, where: i.order > ^item.order, select: i, order_by: [asc: i.order], limit: 2))
+    order = case length(lower_items) do
+      0 -> item.order
+      1 -> Enum.at(lower_items, 0).order * 2
+      2 -> (Enum.at(lower_items, 0).order + Enum.at(lower_items, 1).order) / 2
+    end
+
+    update_item_order(item, order)
+  end
+
+  @doc """
+  set item order
+
+    ## Examples
+
+      iex> update_item_status(item)
+      {:ok, %Item{}}
+
+      iex> update_item_status(item)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  defp update_item_order(%Item{id: id}, order) do
+    {1, [item]} = from(i in Item, where: i.id == ^id, select: i)
+    |> Repo.update_all(set: [order: order])
 
     broadcast({:ok, item}, :item_updated)
   end

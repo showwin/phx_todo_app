@@ -5,7 +5,7 @@ defmodule PhxTodoApp.Todolist.Item do
   schema "items" do
     field :done, :boolean, default: false
     field :title, :string
-    field :order, :integer, default: 1
+    field :order, :float, default: 1.0
 
     timestamps()
   end
