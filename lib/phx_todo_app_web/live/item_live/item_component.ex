@@ -28,12 +28,12 @@ defmodule PhxTodoAppWeb.ItemLive.ItemComponent do
             <span>↓</span>
           <% end %>
         </div>
-        <div class="column column-20">
+        <div class="column column-20 item-tool">
           <%= live_patch to: Routes.item_index_path(@socket, :edit, @item.id) do %>
-            <span>更新</span>
+            <span>Edit</span>
           <% end %>
           <%= link to: "#", phx_click: "delete", phx_target: @myself do %>
-            <span>削除</span>
+            <span>Delete</span>
           <% end %>
         </div>
       </div>
